@@ -10,7 +10,6 @@ import Foundation
 
 protocol LoginInteractorInterface {
     // LoginPresenter -> LoginInteractor
-    func fetchAddressList()
 }
 
 class LoginInteractor {
@@ -21,11 +20,4 @@ class LoginInteractor {
 
 extension LoginInteractor:LoginInteractorInterface{
     
-    func fetchAddressList() {
-//        service.fetchAddressList(onSuccess: {[weak self] (addressList) in
-//            self?.presenter?.addressListFetched(addressList: addressList)
-//        }) {[weak self] (errorMessage) in
-//            self?.presenter?.addressListFetchFailed(with: errorMessage)
-//        }
-    }
 }

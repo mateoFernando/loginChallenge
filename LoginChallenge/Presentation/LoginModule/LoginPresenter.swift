@@ -59,7 +59,6 @@ extension LoginPresenter : LoginPresenterInterface{
     
     func notifyViewLoaded() {
         view?.setupInitialView()
-        interactor?.fetchAddressList()
     }
     
     func notifyViewWillDisappear() {
