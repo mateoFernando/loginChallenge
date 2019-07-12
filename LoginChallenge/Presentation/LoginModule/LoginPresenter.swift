@@ -115,6 +115,7 @@ extension LoginPresenter : LoginPresenterInterface{
     func loginWithFacebook() {
         
         view?.showLoading()
+        loginManager.logOut()
         loginManager.logIn(permissions: [Permission.publicProfile, Permission.email ], viewController: self.view?.getViewController(), completion: { loginResult in
             switch loginResult {
             case .failed(let error):
