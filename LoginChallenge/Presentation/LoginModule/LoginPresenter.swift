@@ -90,6 +90,11 @@ extension LoginPresenter : LoginPresenterInterface{
             let credential = PhoneAuthProvider.provider().credential(
                 withVerificationID: verificationID!,
                 verificationCode: verificationCode!)
+            do {
+                try Auth.auth().signOut()
+            } catch let error {
+                print("Error trying to sign out of Firebase: \(error.localizedDescription)")
+            }
             Auth.auth().signIn(with: credential) { (authResult, error) in
                 if let error = error {
                     self.view?.hideLoading()
@@ -98,14 +103,17 @@ extension LoginPresenter : LoginPresenterInterface{
                 }
                 
                 let user = Auth.auth().currentUser
-                if let user = user {
+                if user != nil {
                     
                     self.view?.hideLoading()
-                    let phoneNumber = user.phoneNumber
+                    let phoneNumber = user?.phoneNumber
                     
                     self.userLogin = UserLoginViewData(name: "", lastName: "", age: "", birth: "", email: "", phoneNumber: phoneNumber!, facebookId: "")
                     
                     self.router!.routeToRegister(viewData:self.userLogin!)
+                }
+                else {
+                    self.showSimpleAlert(title: "Error", message: "Problemas para obtener información")
                 }
             }
         }
@@ -150,6 +158,7 @@ extension LoginPresenter : LoginPresenterInterface{
                         let credential = FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)
                         Auth.auth().signIn(with: credential) { (authResult, error) in
                             if let error = error {
+                                self.showSimpleAlert(title: "Error", message: error.localizedDescription)
                                 print(error)
                                 return
                             }
@@ -159,6 +168,9 @@ extension LoginPresenter : LoginPresenterInterface{
                                 self.view?.hideLoading()
                                 self.userLogin = UserLoginViewData(name: firstName, lastName: lastName, age: "", birth: "", email: email, phoneNumber: "", facebookId: faceId)
                                 self.router!.routeToRegister(viewData:self.userLogin!)
+                            }
+                            else {
+                                self.showSimpleAlert(title: "Error", message: "Problemas para obtener información")
                             }
                         }
                     }
